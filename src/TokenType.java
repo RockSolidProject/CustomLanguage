@@ -37,5 +37,8 @@ public enum TokenType {
     COMMA,
     LSQUARE,
     RSQUARE,
-    IMPORT
+    IMPORT,
+    WRITE,
+    PRINT,
+    RETURN
 }

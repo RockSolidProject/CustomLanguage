@@ -143,6 +143,12 @@ class LexicalAnalyzer(
                         //TODO TMP
                         if (second == TokenType.FUN_NAME && currentString == "import") {
                             out.add(Pair(currentString, TokenType.IMPORT))
+                        } else if (second == TokenType.FUN_NAME && currentString == "write") {
+                            out.add(Pair(currentString, TokenType.WRITE))
+                        } else if (second == TokenType.FUN_NAME && currentString == "print") {
+                            out.add(Pair(currentString, TokenType.PRINT))
+                        } else if (second == TokenType.FUN_NAME && currentString == "return") {
+                            out.add(Pair(currentString, TokenType.RETURN))
                         } else {
                             out.add(Pair(currentString, second))
                         }
@@ -158,6 +164,12 @@ class LexicalAnalyzer(
                         //TODO TMP
                         if (second == TokenType.FUN_NAME && currentString == "import") {
                             out.add(Pair(currentString, TokenType.IMPORT))
+                        } else if (second == TokenType.FUN_NAME && currentString == "write") {
+                            out.add(Pair(currentString, TokenType.WRITE))
+                        } else if (second == TokenType.FUN_NAME && currentString == "print") {
+                            out.add(Pair(currentString, TokenType.PRINT))
+                        } else if (second == TokenType.FUN_NAME && currentString == "return") {
+                            out.add(Pair(currentString, TokenType.RETURN))
                         } else {
                             out.add(Pair(currentString, second))
                         }
