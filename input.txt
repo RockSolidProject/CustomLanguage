@@ -6,12 +6,12 @@ fun main($arg1, $arg2) {
     print($result);
     if ($($result > 10)) {
         write("Result is greater than 10");
-    } elif ($($result == 10)) {
+    } elif ($($result != 10)) {
         write("Result is exactly 10");
     } elif ($($result < 0)) {
         write("Result is less than 0");
     } else {
-        write("Result is negative" + + "nekaj");
+        write("Result is negative" + "nekaj");
     }
     return $result;
 }
@@ -21,7 +21,14 @@ fun nekaj() {
         print($i);
         $i = $i + 1;
     }
-    $i = $nekaj[0];
+    while ($(!$true || $false && $nekaj)) {
+        $i = $i + 1;
+    }
+    if($($true & $asdsa | $assad)){
+        $i = $i + 1;
+    } elif($($sad % 7)){
+        $i = $($i - 1);
+    }
     return $i;
 }
 

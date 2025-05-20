@@ -45,7 +45,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         init()
         program()
         if (currentTokenType != null) {
-            throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+            throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
         }
         return true
     }
@@ -60,7 +60,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
             }
         } else {
-            throw Exception("Expected variable" + printErrorContext())
+            throw Exception("Expected variable").also {  printErrorContext() }
         }
     }
 
@@ -81,13 +81,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         incrementToken()
                         import()
                     } else {
-                        throw Exception("Expected ')'" + printErrorContext())
+                        throw Exception("Expected ')'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected string" + printErrorContext())
+                    throw Exception("Expected string").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
 
@@ -119,22 +119,22 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                             if (currentTokenType == TokenType.RCURL) {
                                 incrementToken()
                             } else {
-                                throw Exception("Expected '}'" + printErrorContext())
+                                throw Exception("Expected '}'").also {  printErrorContext() }
                             }
                         } else {
-                            throw Exception("Expected '{'" + printErrorContext())
+                            throw Exception("Expected '{'").also {  printErrorContext() }
                         }
                     } else {
-                        throw Exception("Expected ')'" + printErrorContext())
+                        throw Exception("Expected ')'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected '('" + printErrorContext())
+                    throw Exception("Expected '('").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected function name" + printErrorContext())
+                throw Exception("Expected function name").also {  printErrorContext() }
             }
         } else {
-            throw Exception("Expected 'function'" + printErrorContext())
+            throw Exception("Expected 'function'").also {  printErrorContext() }
         }
     }
 
@@ -146,7 +146,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
                 args1()
             } else {
-                throw Exception("Expected variable" + printErrorContext())
+                throw Exception("Expected variable").also {  printErrorContext() }
             }
         } else {
 
@@ -162,7 +162,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
                 action1()
             } else {
-                throw Exception("Expected ';'" + printErrorContext())
+                throw Exception("Expected ';'").also {  printErrorContext() }
             }
         } else {
             statement()
@@ -205,13 +205,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
-            throw throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+            throw throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
         }
     }
 
@@ -229,7 +229,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 while0()
             }
 
-            else -> throw throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+            else -> throw throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
         }
     }
 
@@ -239,7 +239,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             elif()
             else0()
         } else {
-            throw Exception("Expected 'if'" + printErrorContext())
+            throw Exception("Expected 'if'").also {  printErrorContext() }
         }
     }
 
@@ -257,16 +257,16 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         if (currentTokenType == TokenType.RCURL) {
                             incrementToken()
                         } else {
-                            throw Exception("Expected '}'" + printErrorContext())
+                            throw Exception("Expected '}'").also {  printErrorContext() }
                         }
                     } else {
-                        throw Exception("Expected '{'" + printErrorContext())
+                        throw Exception("Expected '{'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
 
@@ -274,7 +274,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
     private fun elif() {
-        if (currentTokenType == TokenType.ELIF) {
+        return if (currentTokenType == TokenType.ELIF) {
             elif1()
             elif()
         } else {
@@ -296,16 +296,16 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         if (currentTokenType == TokenType.RCURL) {
                             incrementToken()
                         } else {
-                            throw Exception("Expected '}'" + printErrorContext())
+                            throw Exception("Expected '}'").also {  printErrorContext() }
                         }
                     } else {
-                        throw Exception("Expected '{'" + printErrorContext())
+                        throw Exception("Expected '{'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
 
@@ -321,10 +321,10 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RCURL) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected '}'" + printErrorContext())
+                    throw Exception("Expected '}'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '{'" + printErrorContext())
+                throw Exception("Expected '{'").also {  printErrorContext() }
             }
         } else {
 
@@ -351,25 +351,25 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                                 if (currentTokenType == TokenType.RCURL) {
                                     incrementToken()
                                 } else {
-                                    throw Exception("Expected '}'" + printErrorContext())
+                                    throw Exception("Expected '}'").also {  printErrorContext() }
                                 }
                             } else {
-                                throw Exception("Expected '{'" + printErrorContext())
+                                throw Exception("Expected '{'").also {  printErrorContext() }
                             }
                         } else {
-                            throw Exception("Expected ')'" + printErrorContext())
+                            throw Exception("Expected ')'").also {  printErrorContext() }
                         }
                     } else {
-                        throw Exception("Expected ';'" + printErrorContext())
+                        throw Exception("Expected ';'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected ';'" + printErrorContext())
+                    throw Exception("Expected ';'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
-            throw Exception("Expected 'for'" + printErrorContext())
+            throw Exception("Expected 'for'").also {  printErrorContext() }
         }
     }
 
@@ -387,19 +387,19 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         if (currentTokenType == TokenType.RCURL) {
                             incrementToken()
                         } else {
-                            throw Exception("Expected '}'" + printErrorContext())
+                            throw Exception("Expected '}'").also {  printErrorContext() }
                         }
                     } else {
-                        throw Exception("Expected '{'" + printErrorContext())
+                        throw Exception("Expected '{'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
-            throw Exception("Expected 'while'" + printErrorContext())
+            throw Exception("Expected 'while'").also {  printErrorContext() }
         }
     }
 
@@ -410,10 +410,10 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
                 expression()
             } else {
-                throw Exception("Expected '='" + printErrorContext())
+                throw Exception("Expected '='").also {  printErrorContext() }
             }
         } else {
-            throw Exception("Expected variable" + printErrorContext())
+            throw Exception("Expected variable").also {  printErrorContext() }
         }
     }
 
@@ -426,13 +426,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
-            throw Exception("Expected 'print'" + printErrorContext())
+            throw Exception("Expected 'print'").also {  printErrorContext() }
         }
     }
 
@@ -441,7 +441,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             incrementToken()
             expression()
         } else {
-            throw Exception("Expected 'return'" + printErrorContext())
+            throw Exception("Expected 'return'").also {  printErrorContext() }
         }
     }
 
@@ -454,13 +454,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
-            throw Exception("Expected 'write'" + printErrorContext())
+            throw Exception("Expected 'write'").also {  printErrorContext() }
         }
     }
 
@@ -473,10 +473,10 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'" + printErrorContext())
+                    throw Exception("Expected ')'").also {  printErrorContext() }
                 }
             } else {
-                throw Exception("Expected '('" + printErrorContext())
+                throw Exception("Expected '('").also {  printErrorContext() }
             }
         } else {
             concat()
@@ -490,13 +490,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
     private fun concat1() {
-        return when (currentTokenType) {
-            TokenType.PLUS -> {
-                incrementToken()
+        if (currentTokenType == TokenType.PLUS) {
+            incrementToken()
+            if (currentTokenType in setOf(TokenType.STRING, TokenType.NUMBER, TokenType.VARIABLE)) {
                 concat()
+            } else {
+                throw Exception("Unexpected token after '+' operator: $currentTokenValue").also {  printErrorContext() }
             }
-
-            else -> {}
         }
     }
 
@@ -512,7 +512,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             if (currentTokenType == TokenType.RSQUARE) {
                 incrementToken()
             } else {
-                throw Exception("Expected ']'" + printErrorContext())
+                throw Exception("Expected ']'").also {  printErrorContext() }
             }
         }
     }
@@ -583,7 +583,6 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
                 binary()
             }
-
             else -> {}
         }
     }
@@ -615,13 +614,12 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
     private fun mod1() {
-        return when (currentTokenType) {
-            TokenType.MOD -> {
-                incrementToken()
-                mod()
-            }
+        return if (currentTokenType == TokenType.MOD) {
+            incrementToken()
+            mod()
 
-            else -> {}
+        }else {
+
         }
     }
 
@@ -708,10 +706,10 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                     if (currentTokenType == TokenType.RPAREN) {
                         incrementToken()
                     } else {
-                        throw Exception("Expected ')'" + printErrorContext())
+                        throw Exception("Expected ')'").also {  printErrorContext() }
                     }
                 } else {
-                    throw Exception("Expected '('" + printErrorContext())
+                    throw Exception("Expected '('").also {  printErrorContext() }
                 }
             }
 
@@ -725,7 +723,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 }
             }
 
-            else -> throw throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+            else -> throw throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
         }
     }
 }
