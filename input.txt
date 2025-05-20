@@ -1,3 +1,33 @@
-{}e          import
-    {21.25"fun$fun L~g\"fu{n$a$$a+-*/%&&&|||||;)import(=>foraka>===<<=!=fok!ifilek!whilewhia===else elif
-iffi elif fun lol}[{},[]
+import("library1")
+import("library2")
+
+fun main($arg1, $arg2) {
+    $result = $arg1 + $arg2;
+    print($result);
+    if ($($result > 10)) {
+        write("Result is greater than 10");
+    } elif ($($result == 10)) {
+        write("Result is exactly 10");
+    } elif ($($result < 0)) {
+        write("Result is less than 0");
+    } else {
+        write("Result is negative" + + "nekaj");
+    }
+    return $result;
+}
+
+fun nekaj() {
+    while ($($i < 5)) {
+        print($i);
+        $i = $i + 1;
+    }
+    $i = $nekaj[0];
+    return $i;
+}
+
+fun helper($value) {
+    for ($i = 0; $($i < $value); $i = $i + 1) {
+        print($i);
+    }
+    return $($value * 2);
+}

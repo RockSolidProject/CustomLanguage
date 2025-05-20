@@ -4,6 +4,16 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     private var currentTokenType: TokenType? = null
     private var currentTokenValue: String? = null
 
+    fun init() {
+        if (tokens.isNullOrEmpty()) {
+            throw Exception("Token list is empty or null")
+        }
+        tokenIndex = 0
+        currentToken = tokens!![tokenIndex]
+        currentTokenType = currentToken!!.second
+        currentTokenValue = currentToken!!.first
+    }
+
     private fun incrementToken() {
         tokenIndex++
         if (tokenIndex < tokens!!.size) {
@@ -17,28 +27,223 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
     }
 
-    fun parse(): Boolean {
+    fun printErrorContext() {
+        val contextSize = 3
+        val start = maxOf(0, tokenIndex - contextSize)
+        val end = minOf(tokens!!.size, tokenIndex + contextSize + 1)
 
+        // Prikaži tokene pred, na, in za napako
+        val context = tokens!!.subList(start, end).joinToString(" ") { it.first }
+        println(context)
+
+        // Izračunaj pozicijo napake
+        val errorPosition = tokens!!.subList(start, tokenIndex).sumOf { it.first.length + 1 }
+        println(" ".repeat(errorPosition) + "^")
+    }
+
+    fun parse(): Boolean {
+        init()
+        program()
+        if (currentTokenType != null) {
+            throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+        }
         return true
     }
 
 
     private fun args() {
-        TODO("Not yet implemented")
-    }
+        return if (currentTokenType == TokenType.VARIABLE || currentTokenType == TokenType.RPAREN) {
+            if(currentTokenType == TokenType.VARIABLE) {
+                incrementToken()
+                args1()
+            } else{ // Torej je ')'
 
-
-
-    private fun if0(){
-        return if (currentTokenType == TokenType.IF) {
-            if1()
-            elif1()
-            else0()
+            }
         } else {
-            throw Exception("Expected 'if'")
+            throw Exception("Expected variable" + printErrorContext())
         }
     }
-    private fun if1(){
+
+    private fun program() {
+        import()
+        function()
+        function()
+    }
+
+    private fun import() {
+        return if (currentTokenType == TokenType.IMPORT) {
+            incrementToken()
+            if (currentTokenType == TokenType.LPAREN) {
+                incrementToken()
+                if (currentTokenType == TokenType.STRING) {
+                    incrementToken()
+                    if (currentTokenType == TokenType.RPAREN) {
+                        incrementToken()
+                        import()
+                    } else {
+                        throw Exception("Expected ')'" + printErrorContext())
+                    }
+                } else {
+                    throw Exception("Expected string" + printErrorContext())
+                }
+            } else {
+                throw Exception("Expected '('" + printErrorContext())
+            }
+        } else {
+
+        }
+    }
+
+    private fun function() {
+        return if (currentTokenType == TokenType.FUNCTION) {
+            function1()
+            function()
+        } else {
+
+        }
+    }
+
+    private fun function1() {
+        return if (currentTokenType == TokenType.FUNCTION) {
+            incrementToken()
+            if (currentTokenType == TokenType.FUN_NAME) {
+                incrementToken()
+                if (currentTokenType == TokenType.LPAREN) {
+                    incrementToken()
+                    args()
+                    if (currentTokenType == TokenType.RPAREN) {
+                        incrementToken()
+                        if (currentTokenType == TokenType.LCURL) {
+                            incrementToken()
+                            action()
+                            if (currentTokenType == TokenType.RCURL) {
+                                incrementToken()
+                            } else {
+                                throw Exception("Expected '}'" + printErrorContext())
+                            }
+                        } else {
+                            throw Exception("Expected '{'" + printErrorContext())
+                        }
+                    } else {
+                        throw Exception("Expected ')'" + printErrorContext())
+                    }
+                } else {
+                    throw Exception("Expected '('" + printErrorContext())
+                }
+            } else {
+                throw Exception("Expected function name" + printErrorContext())
+            }
+        } else {
+            throw Exception("Expected 'function'" + printErrorContext())
+        }
+    }
+
+
+    private fun args1() {
+        return if (currentTokenType == TokenType.COMMA) {
+            incrementToken()
+            if (currentTokenType == TokenType.VARIABLE) {
+                incrementToken()
+                args1()
+            } else {
+                throw Exception("Expected variable" + printErrorContext())
+            }
+        } else {
+
+        }
+    }
+
+    private fun action() {
+        val validTokens =
+            setOf(TokenType.VARIABLE, TokenType.PRINT, TokenType.RETURN, TokenType.WRITE, TokenType.FUN_NAME)
+        return if (currentTokenType in validTokens) {
+            action2()
+            if (currentTokenType == TokenType.SEMI) {
+                incrementToken()
+                action1()
+            } else {
+                throw Exception("Expected ';'" + printErrorContext())
+            }
+        } else {
+            statement()
+            action()
+        }
+    }
+
+    private fun action1() {
+        val validTokens = setOf(
+            TokenType.VARIABLE,
+            TokenType.PRINT,
+            TokenType.RETURN,
+            TokenType.WRITE,
+            TokenType.FUN_NAME,
+            TokenType.IF,
+            TokenType.FOR,
+            TokenType.WHILE
+        )
+        return if (currentTokenType in validTokens) {
+            action()
+        } else {
+
+        }
+    }
+
+    private fun action2() { //Action'' ::= Assign | Print | Return | Write | id ( Args )
+        return if (currentTokenType == TokenType.VARIABLE) {
+            assign()
+        } else if (currentTokenType == TokenType.PRINT) {
+            print()
+        } else if (currentTokenType == TokenType.RETURN) {
+            return0()
+        } else if (currentTokenType == TokenType.WRITE) {
+            write()
+        } else if (currentTokenType == TokenType.FUN_NAME) {
+            incrementToken()
+            if (currentTokenType == TokenType.LPAREN) {
+                incrementToken()
+                args()
+                if (currentTokenType == TokenType.RPAREN) {
+                    incrementToken()
+                } else {
+                    throw Exception("Expected ')'" + printErrorContext())
+                }
+            } else {
+                throw Exception("Expected '('" + printErrorContext())
+            }
+        } else {
+            throw throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+        }
+    }
+
+    private fun statement() {
+        return when (currentTokenType) {
+            TokenType.IF -> {
+                if0()
+            }
+
+            TokenType.FOR -> {
+                for0()
+            }
+
+            TokenType.WHILE -> {
+                while0()
+            }
+
+            else -> throw throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
+        }
+    }
+
+    private fun if0() {
+        return if (currentTokenType == TokenType.IF) {
+            if1()
+            elif()
+            else0()
+        } else {
+            throw Exception("Expected 'if'" + printErrorContext())
+        }
+    }
+
+    private fun if1() {
         return if (currentTokenType == TokenType.IF) {
             incrementToken()
             if (currentTokenType == TokenType.LPAREN) {
@@ -52,22 +257,23 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         if (currentTokenType == TokenType.RCURL) {
                             incrementToken()
                         } else {
-                            throw Exception("Expected '}'")
+                            throw Exception("Expected '}'" + printErrorContext())
                         }
                     } else {
-                        throw Exception("Expected '{'")
+                        throw Exception("Expected '{'" + printErrorContext())
                     }
                 } else {
-                    throw Exception("Expected ')'")
+                    throw Exception("Expected ')'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
 
         }
     }
-    private fun elif(){
+
+    private fun elif() {
         if (currentTokenType == TokenType.ELIF) {
             elif1()
             elif()
@@ -75,6 +281,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
         }
     }
+
     private fun elif1() {
         return if (currentTokenType == TokenType.ELIF) {
             incrementToken()
@@ -89,16 +296,16 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         if (currentTokenType == TokenType.RCURL) {
                             incrementToken()
                         } else {
-                            throw Exception("Expected '}'")
+                            throw Exception("Expected '}'" + printErrorContext())
                         }
                     } else {
-                        throw Exception("Expected '{'")
+                        throw Exception("Expected '{'" + printErrorContext())
                     }
                 } else {
-                    throw Exception("Expected ')'")
+                    throw Exception("Expected ')'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
 
@@ -114,10 +321,10 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RCURL) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected '}'")
+                    throw Exception("Expected '}'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '{'")
+                throw Exception("Expected '{'" + printErrorContext())
             }
         } else {
 
@@ -144,25 +351,25 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                                 if (currentTokenType == TokenType.RCURL) {
                                     incrementToken()
                                 } else {
-                                    throw Exception("Expected '}'")
+                                    throw Exception("Expected '}'" + printErrorContext())
                                 }
                             } else {
-                                throw Exception("Expected '{'")
+                                throw Exception("Expected '{'" + printErrorContext())
                             }
                         } else {
-                            throw Exception("Expected ')'")
+                            throw Exception("Expected ')'" + printErrorContext())
                         }
                     } else {
-                        throw Exception("Expected ';'")
+                        throw Exception("Expected ';'" + printErrorContext())
                     }
                 } else {
-                    throw Exception("Expected ';'")
+                    throw Exception("Expected ';'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
-            throw Exception("Expected 'for'")
+            throw Exception("Expected 'for'" + printErrorContext())
         }
     }
 
@@ -180,33 +387,33 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                         if (currentTokenType == TokenType.RCURL) {
                             incrementToken()
                         } else {
-                            throw Exception("Expected '}'")
+                            throw Exception("Expected '}'" + printErrorContext())
                         }
                     } else {
-                        throw Exception("Expected '{'")
+                        throw Exception("Expected '{'" + printErrorContext())
                     }
                 } else {
-                    throw Exception("Expected ')'")
+                    throw Exception("Expected ')'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
-            throw Exception("Expected 'while'")
+            throw Exception("Expected 'while'" + printErrorContext())
         }
     }
 
     private fun assign() {
         return if (currentTokenType == TokenType.VARIABLE) {
             incrementToken()
-            if (currentTokenType == TokenType.EQ) {
+            if (currentTokenType == TokenType.ASSIGN) {
                 incrementToken()
                 expression()
             } else {
-                throw Exception("Expected '='")
+                throw Exception("Expected '='" + printErrorContext())
             }
         } else {
-            throw Exception("Expected variable")
+            throw Exception("Expected variable" + printErrorContext())
         }
     }
 
@@ -219,13 +426,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'")
+                    throw Exception("Expected ')'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
-            throw Exception("Expected 'print'")
+            throw Exception("Expected 'print'" + printErrorContext())
         }
     }
 
@@ -234,7 +441,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             incrementToken()
             expression()
         } else {
-            throw Exception("Expected 'return'")
+            throw Exception("Expected 'return'" + printErrorContext())
         }
     }
 
@@ -247,13 +454,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'")
+                    throw Exception("Expected ')'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
-            throw Exception("Expected 'write'")
+            throw Exception("Expected 'write'" + printErrorContext())
         }
     }
 
@@ -263,13 +470,13 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             if (currentTokenType == TokenType.LPAREN) {
                 incrementToken()
                 compare()
-                if (currentTokenType != TokenType.RPAREN) {
+                if (currentTokenType == TokenType.RPAREN) {
                     incrementToken()
                 } else {
-                    throw Exception("Expected ')'")
+                    throw Exception("Expected ')'" + printErrorContext())
                 }
             } else {
-                throw Exception("Expected '('")
+                throw Exception("Expected '('" + printErrorContext())
             }
         } else {
             concat()
@@ -305,7 +512,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             if (currentTokenType == TokenType.RSQUARE) {
                 incrementToken()
             } else {
-                throw Exception("Expected ']'")
+                throw Exception("Expected ']'" + printErrorContext())
             }
         }
     }
@@ -354,6 +561,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     private fun bval() {
         return if (currentTokenType == TokenType.NEGATION) {
             incrementToken()
+            binary()
         } else {
             binary()
         }
@@ -500,10 +708,10 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                     if (currentTokenType == TokenType.RPAREN) {
                         incrementToken()
                     } else {
-                        throw Exception("Expected ')'")
+                        throw Exception("Expected ')'" + printErrorContext())
                     }
                 } else {
-                    throw Exception("Expected '('")
+                    throw Exception("Expected '('" + printErrorContext())
                 }
             }
 
@@ -517,7 +725,7 @@ class SyntacticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 }
             }
 
-            else -> throw Exception("Unexpected token: $currentTokenValue")
+            else -> throw throw Exception("Unexpected token: $currentTokenValue" + printErrorContext())
         }
     }
 }

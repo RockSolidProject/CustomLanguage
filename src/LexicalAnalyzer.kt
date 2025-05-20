@@ -149,6 +149,10 @@ class LexicalAnalyzer(
                             out.add(Pair(currentString, TokenType.PRINT))
                         } else if (second == TokenType.FUN_NAME && currentString == "return") {
                             out.add(Pair(currentString, TokenType.RETURN))
+                        } else if (second == TokenType.STRING){
+                            out.add(Pair(currentString.removeSurrounding("\""), TokenType.STRING))
+                        } else if (second == TokenType.VARIABLE){
+                            out.add(Pair(currentString.removePrefix("$"), TokenType.VARIABLE))
                         } else {
                             out.add(Pair(currentString, second))
                         }
@@ -170,6 +174,10 @@ class LexicalAnalyzer(
                             out.add(Pair(currentString, TokenType.PRINT))
                         } else if (second == TokenType.FUN_NAME && currentString == "return") {
                             out.add(Pair(currentString, TokenType.RETURN))
+                        } else if (second == TokenType.STRING){
+                            out.add(Pair(currentString.removeSurrounding("\""), TokenType.STRING))
+                        } else if (second == TokenType.VARIABLE){
+                            out.add(Pair(currentString.removePrefix("$"), TokenType.VARIABLE))
                         } else {
                             out.add(Pair(currentString, second))
                         }
