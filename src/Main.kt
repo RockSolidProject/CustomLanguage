@@ -8,6 +8,6 @@ fun main(){
     analyzerOutput.forEach {
         println("Content: \"${it.first}\", type: ${it.second}")
     }
-    val syntacticAnalyzer = SyntacticAnalyzer(analyzerOutput)
-    println(syntacticAnalyzer.parse())
+    val semanticAnalyzer = SemanticAnalyzer(analyzerOutput)
+    println(semanticAnalyzer.testParse())
 }
