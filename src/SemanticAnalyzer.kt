@@ -17,7 +17,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         init()
         println(bval()(initFunctionMap, initVarMap))
         if (currentTokenType != null) {
-            throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
+            throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
         }
         return true
     }
@@ -551,16 +551,26 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
     }
 
-    private fun compare() {
-        bval()
-        compare1()
+    private fun compare(): (Map<String, Funct>, Map<String, String>) -> String {
+        val bv = bval()
+        return compare1(bv)
     }
 
-    private fun compare1() {
-        return when (currentTokenType) {
+    private fun compare1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
+        when (currentTokenType) {
             TokenType.EQ -> { // equal
                 incrementToken()
-                compare()
+                val comp = compare()
+                return lambda@{ functions, vars ->
+                    val first = inherited(functions, vars)
+                    val second = comp(functions, vars)
+                    return@lambda if (first == second || BigDecimal(first) == BigDecimal(second)) {
+                        "1"
+                    } else {
+                        "0"
+                    }
+
+                }
             }
 
             TokenType.LT -> { // less than
@@ -588,17 +598,20 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 compare()
             }
 
-            else -> {}
+            else -> {
+                TODO()
+            }
         }
+        TODO()
     }*/
 
-    private fun bval() : (Map<String, Funct>, Map<String, String>) -> String{
+    private fun bval(): (Map<String, Funct>, Map<String, String>) -> String {
         if (currentTokenType == TokenType.NEGATION) {
             incrementToken()
             val bin = binary()
             return lambda@{ functions, vars ->
                 val res = bin(functions, vars)
-                if(res == "0" || res == "") return@lambda "1"
+                if (res == "0" || res == "") return@lambda "1"
                 else return@lambda "0"
             }
         } else {
@@ -612,67 +625,72 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         return binary1(bit)
     }
 
-    private fun binary1(inherited: (Map<String, Funct>, Map<String, String>) -> String) : (Map<String, Funct>, Map<String, String>) -> String {
+    private fun binary1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
         when (currentTokenType) {
             TokenType.OR -> {
                 incrementToken()
-                val bin = binary()
-                return lambda@ { functions, vars ->
+                val bitwise = bitwise()
+                val lambda = lambda@{ functions:Map<String, Funct>, vars:Map<String, String> ->
                     val inh = BigDecimal(inherited(functions, vars))
-                    val b = BigDecimal(bin(functions, vars))
-                    if(inh != BigDecimal.ZERO || b != BigDecimal.ZERO) {
+                    val b = BigDecimal(bitwise(functions, vars))
+                    if (inh != BigDecimal.ZERO || b != BigDecimal.ZERO) {
                         return@lambda "1"
-                    }else {
+                    } else {
                         return@lambda "0"
                     }
                 }
+                return binary1(lambda)
             }
 
             TokenType.AND -> {
                 incrementToken()
-                val bin = binary()
-                return lambda@ { functions, vars ->
+                val bitwise = bitwise()
+                val lambda = lambda@{ functions:Map<String, Funct>, vars:Map<String, String> ->
                     val inh = BigDecimal(inherited(functions, vars))
-                    val b = BigDecimal(bin(functions, vars))
-                    if(inh != BigDecimal.ZERO && b != BigDecimal.ZERO) {
+                    val b = BigDecimal(bitwise(functions, vars))
+                    if (inh != BigDecimal.ZERO && b != BigDecimal.ZERO) {
                         return@lambda "1"
-                    }else {
+                    } else {
                         return@lambda "0"
                     }
                 }
+                return binary1(lambda)
             }
+
             else -> {
                 return inherited
             }
         }
     }
 
-    private fun bitwise(): (Map<String, Funct>, Map<String, String>) -> String{
+    private fun bitwise(): (Map<String, Funct>, Map<String, String>) -> String {
         val mod = mod()
         val bit = bitwise1(mod)
         return bit
     }
 
-    private fun bitwise1(inherited: (Map<String, Funct>, Map<String, String>) -> String) : (Map<String, Funct>, Map<String, String>) -> String{
+    private fun bitwise1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
         when (currentTokenType) {
             TokenType.BWOR -> {
                 incrementToken()
-                val bit = bitwise()
-                return lambda@ { functions, vars ->
+                val mod = mod()
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
                     val inh = BigDecimal(inherited(functions, vars)).toBigInteger()
-                    val b = BigDecimal(bit(functions, vars)).toBigInteger()
+                    val b = BigDecimal(mod(functions, vars)).toBigInteger()
                     return@lambda inh.or(b).toString()
                 }
+                return bitwise1(lambda)
             }
 
             TokenType.BWAND -> {
                 incrementToken()
-                val bit = bitwise()
-                return lambda@ { functions, vars ->
+                val mod = mod()
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
                     val inh = BigDecimal(inherited(functions, vars)).toBigInteger()
-                    val b = BigDecimal(bit(functions, vars)).toBigInteger()
+                    val b = BigDecimal(mod(functions, vars)).toBigInteger()
                     return@lambda inh.and(b).toString()
                 }
+                return bitwise1(lambda)
             }
 
             else -> {
@@ -686,76 +704,48 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         return mod1(add)
     }
 
-    private fun mod1(inherited: (Map<String, Funct>, Map<String, String>) -> String) : (Map<String, Funct>, Map<String, String>) -> String{
+    private fun mod1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
         if (currentTokenType == TokenType.MOD) {
             incrementToken()
-            val mod = mod()
+            val add = additive()
             //incrementToken()
-            return lambda@ { functions, vars ->
-                val inh = BigDecimal(inherited(functions, vars)).remainder(BigDecimal(mod(functions, vars)))
+            val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
+                val inh = BigDecimal(inherited(functions, vars)).remainder(BigDecimal(add(functions, vars)))
                 return@lambda inh.toPlainString()
             }
+            return mod1(lambda)
 
-        }else {
+        } else {
             return inherited
         }
     }
 
-    private fun additive() : (Map<String, Funct>, Map<String, String>) -> String {
+    private fun additive(): (Map<String, Funct>, Map<String, String>) -> String {
         val mul = multiplicative()
         val add1 = additive1(mul)
         return add1
     }
 
-    private fun additive1(inherited: (Map<String, Funct>, Map<String, String>) -> String) : (Map<String, Funct>, Map<String, String>) -> String {
+    private fun additive1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
         when (currentTokenType) {
             TokenType.PLUS -> {
                 incrementToken()
-                val add = additive()
-                return lambda@ { functions, vars ->
-                    val inh = BigDecimal(inherited(functions, vars)).plus(BigDecimal(add(functions, vars)))
+                val multiplicative = multiplicative()
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
+                    val inh = BigDecimal(inherited(functions, vars)).plus(BigDecimal(multiplicative(functions, vars)))
                     return@lambda inh.toPlainString()
                 }
+                return additive1(lambda)
             }
 
             TokenType.MINUS -> {
                 incrementToken()
-                val add = additive()
-                return lambda@ { functions, vars ->
-                    val inh = BigDecimal(inherited(functions, vars)).minus(BigDecimal(add(functions, vars)))
+                val multiplicative = multiplicative()
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
+                    val inh = BigDecimal(inherited(functions, vars)).minus(BigDecimal(multiplicative(functions, vars)))
                     return@lambda inh.toPlainString()
                 }
-            }
-
-            else -> {return inherited}
-        }
-    }
-
-    private fun multiplicative() : (Map<String, Funct>, Map<String, String>) -> String {
-        val un = unit()
-        val out = multiplicative1(un)
-        return out
-    }
-
-
-    private fun multiplicative1(inherited: (Map<String, Funct>, Map<String, String>) -> String) : (Map<String, Funct>, Map<String, String>) -> String {
-        when (currentTokenType) {
-            TokenType.MULTIPLY -> {
-                incrementToken()
-                val mul = multiplicative()
-                return lambda@ { functions, vars ->
-                    val inh = BigDecimal(inherited(functions, vars)).times(BigDecimal(mul(functions, vars)))
-                    return@lambda inh.toPlainString()
-                }
-            }
-
-            TokenType.DIVIDE -> {
-                incrementToken()
-                val mul = multiplicative()
-                return lambda@ { functions, vars ->
-                    val inh = BigDecimal(inherited(functions, vars)).divide(BigDecimal(mul(functions, vars)), 10, RoundingMode.HALF_UP)
-                    return@lambda inh.toPlainString()
-                }
+                return additive1(lambda)
             }
 
             else -> {
@@ -764,7 +754,46 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
     }
 
-    private fun unit() : (Map<String, Funct>, Map<String, String>) -> String {
+    private fun multiplicative(): (Map<String, Funct>, Map<String, String>) -> String {
+        val un = unit()
+        val out = multiplicative1(un)
+        return out
+    }
+
+
+    private fun multiplicative1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
+        when (currentTokenType) {
+            TokenType.MULTIPLY -> {
+                incrementToken()
+                val un = unit()
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
+                    val inh = BigDecimal(inherited(functions, vars)).times(BigDecimal(un(functions, vars)))
+                    return@lambda inh.toPlainString()
+                }
+                return multiplicative1(lambda)
+            }
+
+            TokenType.DIVIDE -> {
+                incrementToken()
+                val un = unit()
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
+                    val inh = BigDecimal(inherited(functions, vars)).divide(
+                        BigDecimal(un(functions, vars)),
+                        10,
+                        RoundingMode.HALF_UP
+                    )
+                    return@lambda inh.toPlainString()
+                }
+                return multiplicative1(lambda)
+            }
+
+            else -> {
+                return inherited
+            }
+        }
+    }
+
+    private fun unit(): (Map<String, Funct>, Map<String, String>) -> String {
         when (currentTokenType) {
             TokenType.PLUS -> {
                 incrementToken()
@@ -788,19 +817,19 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
     }
 
-    private fun primary() : (Map<String, Funct>, Map<String, String>) -> String
-    {
+    private fun primary(): (Map<String, Funct>, Map<String, String>) -> String {
         when (currentTokenType) {
             TokenType.STRING,
-            TokenType.NUMBER ->{
+            TokenType.NUMBER -> {
                 val content = currentTokenValue
                 incrementToken()
-                return {functions, vars -> content ?: ""}
+                return { functions, vars -> content ?: "" }
             }
+
             TokenType.VARIABLE -> {
                 val currVal = currentTokenValue
                 incrementToken()
-                return {functions, vars ->
+                return { functions, vars ->
                     vars[currVal] ?: throw Error("variable name \"$currVal\" does not exist")
                 }
             }
@@ -821,7 +850,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                     throw Exception("Expected ')'").also { printErrorContext() }
                 }
                 incrementToken()
-                return {functions, vars ->
+                return { functions, vars ->
                     TODO()
                 }
             }
