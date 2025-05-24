@@ -1,5 +1,7 @@
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.math.RoundingMode
+import java.io.File
 
 class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     private var tokenIndex = 0
@@ -10,12 +12,15 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     companion object {
         var initFunctionMap = mutableMapOf<String, Funct>()
         var initVarMap = mutableMapOf<String, String>(Pair("var", "3"))
+        val file = File("output.txt")
+
     }
 
 
     fun testParse(): Boolean {
+        file.createNewFile()
         init()
-        println(bval()(initFunctionMap, initVarMap))
+        println(write()(initFunctionMap, initVarMap))
         if (currentTokenType != null) {
             throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
         }
@@ -35,6 +40,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
     private fun incrementToken() {
         tokenIndex++
+
         if (tokenIndex < tokens!!.size) {
             currentToken = tokens!![tokenIndex]
             currentTokenType = currentToken!!.second
@@ -44,6 +50,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             currentTokenType = null
             currentTokenValue = null
         }
+        println("new token : $currentTokenType")
     }
 
     fun printErrorContext() {
@@ -476,79 +483,77 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         } else {
             throw Exception("Expected 'return'").also {  printErrorContext() }
         }
-    }
+    }*/
 
-    private fun write() {
-        return if (currentTokenType == TokenType.WRITE) {
-            incrementToken()
-            if (currentTokenType == TokenType.LPAREN) {
-                incrementToken()
-                expression()
-                if (currentTokenType == TokenType.RPAREN) {
-                    incrementToken()
-                } else {
-                    throw Exception("Expected ')'").also {  printErrorContext() }
-                }
-            } else {
-                throw Exception("Expected '('").also {  printErrorContext() }
-            }
-        } else {
-            throw Exception("Expected 'write'").also {  printErrorContext() }
+    private fun write(): (Map<String, Funct>, Map<String, String>) -> Unit {
+        println("trenutni token $currentTokenType")
+        if (currentTokenType != TokenType.WRITE) throw Exception("Expected 'write'").also { printErrorContext() }
+        incrementToken()
+        if (currentTokenType != TokenType.LPAREN) throw Exception("Expected '('").also { printErrorContext() }
+        incrementToken()
+        val expr = expression()
+        if (currentTokenType != TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
+        incrementToken()
+        return { functions, vars ->
+            file.appendText(expr(functions, vars))
         }
+
+
     }
 
-    private fun expression() : (Map<String, Funct>, Map<String, String>) -> String
-    {
+    private fun expression(): (Map<String, Funct>, Map<String, String>) -> String {
         if (currentTokenType == TokenType.CALCULATE) {
             incrementToken()
-            if (currentTokenType == TokenType.LPAREN) {
-                incrementToken()
-                compare()
-                if (currentTokenType == TokenType.RPAREN) {
-                    incrementToken()
-                } else {
-                    throw Exception("Expected ')'").also {  printErrorContext() }
-                }
-            } else {
-                throw Exception("Expected '('").also {  printErrorContext() }
-            }
+            if (currentTokenType != TokenType.LPAREN) throw Exception("Expected '('").also { printErrorContext() }
+            incrementToken()
+            val comp = compare()
+            if (currentTokenType != TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
+            incrementToken()
+            return comp
         } else {
-            concat()
+            return concat()
         }
     }
 
 
-    private fun concat() {
-        get()
-        concat1()
+    private fun concat(): (Map<String, Funct>, Map<String, String>) -> String {
+        val get = get()
+        return concat1(get)
     }
 
-    private fun concat1() {
+    private fun concat1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
         if (currentTokenType == TokenType.PLUS) {
             incrementToken()
             if (currentTokenType in setOf(TokenType.STRING, TokenType.NUMBER, TokenType.VARIABLE, TokenType.FUN_NAME)) {
-                concat()
+                val get = get()
+                val lambda = lambda@{ functs: Map<String, Funct>, vars: Map<String, String> ->
+                    return@lambda inherited(functs, vars) + get(functs, vars)
+                }
+                return concat1(lambda)
             } else {
-                throw Exception("Unexpected token after '+' operator: $currentTokenValue").also {  printErrorContext() }
+                throw Exception("Unexpected token after '+' operator: $currentTokenValue").also { printErrorContext() }
             }
+        } else {
+            return inherited
         }
     }
 
-    private fun get() {
-        unit()
-        get1()
+    private fun get(): (Map<String, Funct>, Map<String, String>) -> String {
+        val prim = primary()
+        return get1(prim)
     }
 
-    private fun get1() {
-        if (currentTokenType == TokenType.LSQUARE) {
-            incrementToken()
-            unit()
-            if (currentTokenType == TokenType.RSQUARE) {
-                incrementToken()
-            } else {
-                throw Exception("Expected ']'").also {  printErrorContext() }
-            }
+    private fun get1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
+        if (currentTokenType != TokenType.LSQUARE) return inherited
+        incrementToken()
+        val prim = primary()
+        if (currentTokenType != TokenType.RSQUARE) throw Exception("Expected ']'").also { printErrorContext() }
+        incrementToken()
+        return lambda@{ functions, vars ->
+            return@lambda inherited(functions, vars)[BigInteger(prim(functions, vars)).toInt()].toString()
         }
+
+
     }
 
     private fun compare(): (Map<String, Funct>, Map<String, String>) -> String {
@@ -557,53 +562,29 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
     private fun compare1(inherited: (Map<String, Funct>, Map<String, String>) -> String): (Map<String, Funct>, Map<String, String>) -> String {
-        when (currentTokenType) {
-            TokenType.EQ -> { // equal
-                incrementToken()
-                val comp = compare()
-                return lambda@{ functions, vars ->
-                    val first = inherited(functions, vars)
-                    val second = comp(functions, vars)
-                    return@lambda if (first == second || BigDecimal(first) == BigDecimal(second)) {
-                        "1"
-                    } else {
-                        "0"
-                    }
-
-                }
-            }
-
-            TokenType.LT -> { // less than
-                incrementToken()
-                compare()
-            }
-
-            TokenType.GT -> { // greater than
-                incrementToken()
-                compare()
-            }
-
-            TokenType.LE -> { // less than or equal
-                incrementToken()
-                compare()
-            }
-
-            TokenType.GE -> { // greater than or equal
-                incrementToken()
-                compare()
-            }
-
-            TokenType.NE -> { // not equal
-                incrementToken()
-                compare()
-            }
-
-            else -> {
-                TODO()
-            }
+        val comparison: ((BigDecimal, BigDecimal) -> Boolean)? = when (currentTokenType) {
+            TokenType.EQ -> BigDecimal::equals
+            TokenType.NE -> { a, b -> a != b }
+            TokenType.LT -> { a, b -> a < b }
+            TokenType.GT -> { a, b -> a > b }
+            TokenType.LE -> { a, b -> a <= b }
+            TokenType.GE -> { a, b -> a >= b }
+            else -> null
         }
-        TODO()
-    }*/
+
+        return if (comparison != null) {
+            incrementToken()
+            val bv = bval()
+            val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
+                val first = BigDecimal(inherited(functions, vars))
+                val second = BigDecimal(bv(functions, vars))
+                return@lambda if (comparison(first, second)) "1" else "0"
+            }
+            compare1(lambda)
+        } else {
+            inherited
+        }
+    }
 
     private fun bval(): (Map<String, Funct>, Map<String, String>) -> String {
         if (currentTokenType == TokenType.NEGATION) {
@@ -630,7 +611,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             TokenType.OR -> {
                 incrementToken()
                 val bitwise = bitwise()
-                val lambda = lambda@{ functions:Map<String, Funct>, vars:Map<String, String> ->
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
                     val inh = BigDecimal(inherited(functions, vars))
                     val b = BigDecimal(bitwise(functions, vars))
                     if (inh != BigDecimal.ZERO || b != BigDecimal.ZERO) {
@@ -645,7 +626,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             TokenType.AND -> {
                 incrementToken()
                 val bitwise = bitwise()
-                val lambda = lambda@{ functions:Map<String, Funct>, vars:Map<String, String> ->
+                val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
                     val inh = BigDecimal(inherited(functions, vars))
                     val b = BigDecimal(bitwise(functions, vars))
                     if (inh != BigDecimal.ZERO && b != BigDecimal.ZERO) {
@@ -732,7 +713,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
                 val multiplicative = multiplicative()
                 val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
-                    val inh = BigDecimal(inherited(functions, vars)).plus(BigDecimal(multiplicative(functions, vars)))
+                    val inh =
+                        BigDecimal(inherited(functions, vars)).plus(BigDecimal(multiplicative(functions, vars)))
                     return@lambda inh.toPlainString()
                 }
                 return additive1(lambda)
@@ -742,7 +724,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
                 val multiplicative = multiplicative()
                 val lambda = lambda@{ functions: Map<String, Funct>, vars: Map<String, String> ->
-                    val inh = BigDecimal(inherited(functions, vars)).minus(BigDecimal(multiplicative(functions, vars)))
+                    val inh =
+                        BigDecimal(inherited(functions, vars)).minus(BigDecimal(multiplicative(functions, vars)))
                     return@lambda inh.toPlainString()
                 }
                 return additive1(lambda)
