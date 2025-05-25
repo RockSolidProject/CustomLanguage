@@ -20,7 +20,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     private var currentToken: Pair<String, TokenType>? = null
     private var currentTokenType: TokenType? = null
     private var currentTokenValue: String? = null
-    private var checkCondition = {str:String -> str != "" && (str.toBigDecimalOrNull() == null || str.toBigDecimal() != BigDecimal.ZERO)}
+    private var checkCondition =
+        { str: String -> str != "" && (str.toBigDecimalOrNull() == null || str.toBigDecimal() != BigDecimal.ZERO) }
 
     companion object {
         var initFunctionMap = mutableMapOf<String, Funct>()
@@ -91,9 +92,6 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }*/
 
 
-
-
-
     /*private fun import() {
         if (currentTokenType != TokenType.IMPORT) {
             return  // Or throw an error if 'IMPORT' is mandatory
@@ -119,7 +117,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }*/
 
 
-    private fun function() : Funct {
+    private fun function(): Funct {
         return if (currentTokenType == TokenType.FUNCTION) {
             val funct = function1()
             function()
@@ -165,14 +163,14 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
         incrementToken()
         val numArgs = args.size
-        val body = lambda@{ functionArguments:MutableList<String>, functions: MutableMap<String, Funct>->
-            if(functionArguments.size != numArgs) throw Exception("Expected number of arguments: $numArgs, given: ${functionArguments.size}")
+        val body = lambda@{ functionArguments: MutableList<String>, functions: MutableMap<String, Funct> ->
+            if (functionArguments.size != numArgs) throw Exception("Expected number of arguments: $numArgs, given: ${functionArguments.size}")
             val vars = mutableMapOf<String, String>()
-            for(i in 0 until numArgs) {
+            for (i in 0 until numArgs) {
                 vars[args[i]] = functionArguments[i]
             }
             val ret = act(functions, vars)
-            if(ret is String) return@lambda ret else return@lambda ""
+            if (ret is String) return@lambda ret else return@lambda ""
         }
     }
 
@@ -184,9 +182,11 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 val list = mutableListOf(name)
                 args1(list)
             }
+
             TokenType.RPAREN -> {
                 mutableListOf() // no arguments
             }
+
             else -> {
                 throw Exception("Expected variable").also { printErrorContext() }
             }
@@ -208,45 +208,37 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             inherited // done parsing arguments
         }
     }
-    private fun funArgs(): MutableList<String> {
+
+    private fun functionArgs(): MutableList<LambdaToString> {
         return when (currentTokenType) {
-            TokenType.VARIABLE -> {
-                val name = currentTokenValue!!
-                incrementToken()
-                val list = mutableListOf(name)
-                args1(list)
-            }
             TokenType.RPAREN -> {
-                mutableListOf() // no arguments
+                mutableListOf() // No arguments
             }
+
             else -> {
-                throw Exception("Expected variable").also { printErrorContext() }
+                val expr = expression()
+                val list = mutableListOf(expr)
+                return functionArgs1(list)
             }
         }
     }
 
-    private fun funArgs1(inherited: MutableList<String>): MutableList<String> {
+
+    private fun functionArgs1(inherited: MutableList<LambdaToString>): MutableList<LambdaToString> {
         return if (currentTokenType == TokenType.COMMA) {
             incrementToken()
-            if (currentTokenType == TokenType.VARIABLE) {
-                val name = currentTokenValue
-                inherited.add(name!!) // <-- fix: add the variable name
-                incrementToken()
-                args1(inherited) // recursively check for more
-            } else {
-                throw Exception("Expected variable").also { printErrorContext() }
-            }
+            val expr = expression()
+            inherited.add(expr)
+            functionArgs1(inherited)
         } else {
-            inherited // done parsing arguments
+            inherited // End of argument list
         }
     }
-
-
-
 
 
     private fun action(): LambdaToAny {
-        val validTokens = setOf(TokenType.VARIABLE, TokenType.PRINT, TokenType.RETURN, TokenType.WRITE, TokenType.FUN_NAME)
+        val validTokens =
+            setOf(TokenType.VARIABLE, TokenType.PRINT, TokenType.RETURN, TokenType.WRITE, TokenType.FUN_NAME)
 
         return if (currentTokenType in validTokens) {
             val firstAction = action2()
@@ -301,26 +293,27 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         } else if (currentTokenType == TokenType.WRITE) {
             return write()
         } else if (currentTokenType == TokenType.FUN_NAME) {
-            TODO()
+            val name = currentTokenValue!!
             incrementToken()
-            if (currentTokenType == TokenType.LPAREN) {
-
-                incrementToken()
-                //args()
-                if (currentTokenType == TokenType.RPAREN) {
-                    incrementToken()
-                } else {
-                    throw Exception("Expected ')'").also {  printErrorContext() }
-                }
-            } else {
-                throw Exception("Expected '('").also {  printErrorContext() }
+            if (currentTokenType != TokenType.LPAREN) throw Exception("Expected '('").also { printErrorContext() }
+            incrementToken()
+            val arguments = functionArgs()
+            if (currentTokenType == TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
+            incrementToken()
+            return lambda@{ functions, vars ->
+                val argValues = mutableListOf<String>()
+                for(arg in arguments) argValues.add(arg(functions, vars))
+                functions[name]!!.body(argValues, functions)
+                return@lambda Unit
             }
+
+
         } else {
-            throw throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
+            throw throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
         }
     }
 
-    private fun statement():LambdaToAny {
+    private fun statement(): LambdaToAny {
         when (currentTokenType) {
             TokenType.IF -> {
                 return if0()
@@ -334,7 +327,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 return while0()
             }
 
-            else -> throw throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
+            else -> throw throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
         }
     }
 
@@ -344,11 +337,11 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         val second = elif(first)
         val third = else0()
         return lambda@{ functions, vars ->
-            val firstOut:Pair<Boolean, String?> = first(functions, vars) as Pair<Boolean,String?>
-            if(firstOut.first) return@lambda firstOut.second ?: Unit
-            val secondOut:Pair<Boolean, String?> = second(functions, vars) as Pair<Boolean,String?>
-            if(secondOut.first) return@lambda secondOut.second ?: Unit
-            val thirdOut:String? = third(functions, vars) as String?
+            val firstOut: Pair<Boolean, String?> = first(functions, vars) as Pair<Boolean, String?>
+            if (firstOut.first) return@lambda firstOut.second ?: Unit
+            val secondOut: Pair<Boolean, String?> = second(functions, vars) as Pair<Boolean, String?>
+            if (secondOut.first) return@lambda secondOut.second ?: Unit
+            val thirdOut: String? = third(functions, vars) as String?
             return@lambda thirdOut ?: Unit
         }
     }
@@ -371,18 +364,17 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
         incrementToken()
 
-        val act = expression()//action()
+        val act = action()
         if (currentTokenType != TokenType.RCURL) {
             throw Exception("Expected '}'").also { printErrorContext() }
         }
         incrementToken()
         return lambda@{ functions, vars ->
-            if(checkCondition(expr(functions, vars))) {
+            if (checkCondition(expr(functions, vars))) {
                 val res = act(functions, vars)
-                if(res is String) return@lambda Pair<Boolean, String?>(true, res)
+                if (res is String) return@lambda Pair<Boolean, String?>(true, res)
                 else return@lambda Pair<Boolean, String?>(true, null)
-            }
-            else return@lambda Pair<Boolean, String?>(false, null)
+            } else return@lambda Pair<Boolean, String?>(false, null)
         }
     }
 
@@ -415,7 +407,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         if (currentTokenType != TokenType.LCURL) throw Exception("Expected '{'").also { printErrorContext() }
         incrementToken()
 
-        val block = expression() // use action() if supporting multiple statements
+        val block = action() //if supporting multiple statements
 
         if (currentTokenType != TokenType.RCURL) throw Exception("Expected '}'").also { printErrorContext() }
         incrementToken()
@@ -431,13 +423,12 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
 
-
     private fun else0(): LambdaToAny {
         if (currentTokenType == TokenType.ELSE) {
             incrementToken()
             if (currentTokenType != TokenType.LCURL) throw Exception("Expected '{'").also { printErrorContext() }
             incrementToken()
-            val block = expression()
+            val block = action()
             if (currentTokenType != TokenType.RCURL) throw Exception("Expected '}'").also { printErrorContext() }
             incrementToken()
 
@@ -487,7 +478,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
         incrementToken()
 
-        val act = expression()//action()
+        val act = action()
 
         if (currentTokenType != TokenType.RCURL) {
             throw Exception("Expected '}'").also { printErrorContext() }
@@ -540,7 +531,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         }
         incrementToken()
 
-        val act = expression()//TODO()
+        val act = action()
 
         if (currentTokenType != TokenType.RCURL) {
             throw Exception("Expected '}'").also { printErrorContext() }
@@ -941,37 +932,39 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             }
 
             TokenType.FUN_NAME -> {
-                TODO()
-                val name = currentTokenValue // storing function name
+                val name = currentTokenValue ?: throw Exception("Expected function name")
                 incrementToken()
 
                 if (currentTokenType != TokenType.LPAREN) {
                     throw Exception("Expected '('").also { printErrorContext() }
                 }
-
                 incrementToken()
-                //var arguments = args() // storing function arguments
+
+                val args = functionArgs()
 
                 if (currentTokenType != TokenType.RPAREN) {
                     throw Exception("Expected ')'").also { printErrorContext() }
                 }
                 incrementToken()
-                return { functions, vars ->
-                    TODO()
+
+                return let@{ functions, vars ->
+                    val funct = functions[name] ?: throw Exception("Function $name not defined")
+                    val evaluatedArgs = args.map { it(functions, vars) }.toMutableList()
+                    return@let funct.body(evaluatedArgs, functions)
                 }
             }
 
             TokenType.LPAREN -> {
-                TODO()
+
                 incrementToken()
 
-                //val expr = expression()
+                val expr = expression()
 
                 if (currentTokenType != TokenType.RPAREN) {
                     throw Exception("Expected ')'").also { printErrorContext() }
                 }
                 incrementToken()
-                //return expr
+                return expr
             }
 
             else -> throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
