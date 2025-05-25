@@ -597,7 +597,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             var exRes = expr(fCopy, vCopy)
             var checker = exRes != "" && (exRes.toBigDecimalOrNull() == null || exRes.toBigDecimal() != BigDecimal.ZERO)
             while (checker) {
-                val bodyResult = act(functions, vars)
+                val bodyResult = act(fCopy, vCopy)
                 if (bodyResult is String) {
                     functions.forEach { key, value ->
                         functions[key] = fCopy[key]!!
@@ -653,7 +653,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             var checker = exRes != "" && (exRes.toBigDecimalOrNull() == null || exRes.toBigDecimal() != BigDecimal.ZERO)
 
             while (checker) {
-                val ret = act(functions, variables)
+                val ret = act(fCopy, vCopy)
                 if (ret is String) {
                     functions.forEach { key, value ->
                         functions[key] = fCopy[key]!!
@@ -663,8 +663,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                     }
                     return@lambda ret
                 }
-                exRes = expr(functions, variables)
-                var checker =
+                exRes = expr(fCopy, vCopy)
+                checker =
                     exRes != "" && (exRes.toBigDecimalOrNull() == null || exRes.toBigDecimal() != BigDecimal.ZERO)
             }
         }
