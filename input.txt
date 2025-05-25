@@ -1,1 +1,12 @@
-$var1, $var2, $var3
+fun main() {
+    $var1 = 3;
+    $var2 = 4;
+    print(factorial(4));
+    return "jajaaja";
+}
+
+fun factorial($i) {
+    if($($i == 1)) {return 1;}
+    $result = $($i * factorial($($i - 1)));
+    return $result;
+}

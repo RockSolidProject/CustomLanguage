@@ -35,7 +35,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     fun testParse(): Boolean {
         file.createNewFile()
         init()
-        println(args())
+        println(program())
         if (currentTokenType != null) {
             throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
         }
@@ -82,6 +82,13 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         println(" ".repeat(errorPosition) + "^")
     }
 
+    fun program() {
+        val functions = function()
+        var varMapCopy = initVarMap.toMutableMap()
+        //TODO dodaj funkcije iz initFunctionMap
+        functions["main"]!!.body(mutableListOf(), functions, varMapCopy)
+    }
+
     /*fun parse(): Boolean {
         init()
         program()
@@ -117,17 +124,69 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }*/
 
 
-    private fun function(): Funct {
-        return if (currentTokenType == TokenType.FUNCTION) {
-            val funct = function1()
-            function()
+    private fun function(): MutableMap<String, Funct> {
+        if (currentTokenType == TokenType.FUNCTION) {
+            val func = function1()
+            val funcMap = function2(mutableMapOf(func))
+            return funcMap
         } else {
             throw Exception("Unexpected token type: $currentTokenType").also { printErrorContext() }
         }
 
     }
 
-    private fun function1() {
+    private fun function1(): Pair<String, Funct> {
+        if (currentTokenType != TokenType.FUNCTION) throw Exception("Expected 'function'").also { printErrorContext() }
+        incrementToken()
+        if (currentTokenType != TokenType.FUN_NAME) throw Exception("Expected function name").also { printErrorContext() }
+
+        val name = currentTokenValue!!
+
+        incrementToken()
+        if (currentTokenType != TokenType.LPAREN) throw Exception("Expected '('").also { printErrorContext() }
+        incrementToken()
+        val args = args()
+        if (currentTokenType != TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
+        incrementToken()
+        if (currentTokenType != TokenType.LCURL) throw Exception("Expected '{'").also { printErrorContext() }
+        incrementToken()
+
+        val act = action()
+
+        if (currentTokenType != TokenType.RCURL) throw Exception("Expected '}'").also { printErrorContext() }
+
+        incrementToken()
+        val numArgs = args.size
+        val body = lambda@{ functionArguments: MutableList<String>, functions: MutableMap<String, Funct>, variables: MutableMap<String, String> ->
+            if (functionArguments.size != numArgs) throw Exception("Expected number of arguments: $numArgs, given: ${functionArguments.size}")
+            val vars = mutableMapOf<String, String>()
+            for (i in 0 until numArgs) {
+                vars[args[i]] = functionArguments[i]
+            }
+            val ret = act(functions, vars)
+            if (ret is String) return@lambda ret as String else return@lambda ""
+        }
+        return Pair(name, Funct(numArgs, body))
+    }
+    fun function2(inherited: MutableMap<String, Funct>): MutableMap<String, Funct> {
+        if(currentTokenType != TokenType.FUNCTION) return inherited
+        val pair = function1()
+        inherited[pair.first] = pair.second
+        return inherited
+    }
+    /*private fun function(): MutableMap<String, Funct> {
+        val functions = mutableMapOf<String, Funct>()
+        while (currentTokenType == TokenType.FUNCTION) {
+            val (name, funct) = function1()
+            if (functions.containsKey(name)) {
+                throw Exception("Function $name already defined").also { printErrorContext() }
+            }
+            functions[name] = funct
+        }
+        return functions
+    }
+
+    private fun function1(): Pair<String, Funct> {
         if (currentTokenType != TokenType.FUNCTION) {
             throw Exception("Expected 'function'").also { printErrorContext() }
         }
@@ -162,17 +221,22 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             throw Exception("Expected '}'").also { printErrorContext() }
         }
         incrementToken()
-        val numArgs = args.size
-        val body = lambda@{ functionArguments: MutableList<String>, functions: MutableMap<String, Funct> ->
-            if (functionArguments.size != numArgs) throw Exception("Expected number of arguments: $numArgs, given: ${functionArguments.size}")
-            val vars = mutableMapOf<String, String>()
-            for (i in 0 until numArgs) {
-                vars[args[i]] = functionArguments[i]
+
+        val body = lambda@{ actualArgs: Array<String>, functions: MutableMap<String, Funct> ->
+            if (actualArgs.size != args.size) {
+                throw Exception("Function $name expected ${args.size} arguments, got ${actualArgs.size}")
             }
-            val ret = act(functions, vars)
-            if (ret is String) return@lambda ret else return@lambda ""
+            val localVars = mutableMapOf<String, String>()
+            for (i in args.indices) {
+                localVars[args[i]] = actualArgs[i]
+            }
+            val result = act(functions, localVars)
+            result ?: ""
         }
-    }
+
+        return name to Funct(args.size, body)
+    }  */
+
 
     private fun args(): MutableList<String> {
         return when (currentTokenType) {
@@ -303,7 +367,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             return lambda@{ functions, vars ->
                 val argValues = mutableListOf<String>()
                 for(arg in arguments) argValues.add(arg(functions, vars))
-                functions[name]!!.body(argValues, functions)
+                var varsCopy = initVarMap.toMutableMap()
+                functions[name]!!.body(argValues, functions, varsCopy)
                 return@lambda Unit
             }
 
@@ -948,9 +1013,10 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
                 incrementToken()
 
                 return let@{ functions, vars ->
-                    val funct = functions[name] ?: throw Exception("Function $name not defined")
+                    val funct = functions[name] ?: throw Exception("Function $name not defined: only defined ${functions}")
                     val evaluatedArgs = args.map { it(functions, vars) }.toMutableList()
-                    return@let funct.body(evaluatedArgs, functions)
+                    var varsCopy = initVarMap.toMutableMap()
+                    return@let funct.body(evaluatedArgs, functions, varsCopy)
                 }
             }
 
