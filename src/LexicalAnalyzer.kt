@@ -136,7 +136,7 @@ class LexicalAnalyzer(
                 state = nextState
 
                 if (i+1 == str.length){
-                    if (stateTable!![state].second == null)
+                    if (stateTable!![state].second == TokenType.NULL)
                         throw IllegalArgumentException("Program ends in a non valid way.")
                     if (!ignore.contains(stateTable!![state].second!!.name.lowercase())){
                         var second = stateTable!![state].second!!
@@ -161,7 +161,7 @@ class LexicalAnalyzer(
                 }
             }
             else {
-                if(stateTable!![state].second != null){
+                if(stateTable!![state].second != TokenType.NULL){
                     i--
                     if (!ignore.contains(stateTable!![state].second!!.name.lowercase())){
                         var second = stateTable!![state].second!!

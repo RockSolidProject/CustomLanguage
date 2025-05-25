@@ -16,6 +16,39 @@ private fun String.toBigDecimalOrNull(): BigDecimal? {
 }
 
 class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
+    init {
+        initFunctionMap["door"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a door")
+            features.featuresList.add(Door(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+        initFunctionMap["window"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a window")
+            features.featuresList.add(Window(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+        initFunctionMap["wall"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a wall")
+            features.featuresList.add(Wall(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+    }
+
     private var tokenIndex = 0
     private var currentToken: Pair<String, TokenType>? = null
     private var currentTokenType: TokenType? = null
@@ -25,20 +58,28 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
     companion object {
         var initFunctionMap = mutableMapOf<String, Funct>()
-        var initVarMap = mutableMapOf<String, String>(Pair("var", "3"))
+        var initVarMap = mutableMapOf<String, String>()
         val file = File("output.txt")
-
-
+        val fileGeo = File("geoOutput.txt")
+        val features = Features()
     }
 
-
     fun testParse(): Boolean {
-        file.createNewFile()
-        init()
-        println(program())
-        if (currentTokenType != null) {
-            throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
+        file.writeText("")
+        try {
+            init()
+            program()
         }
+        catch (e : Exception) {
+            println("Error: " + e.message)
+            return false
+        }
+        if (currentTokenType != null) {
+            //throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
+            println("Unexpected token: $currentTokenValue")
+            return false
+        }
+        fileGeo.writeText(features.toGeoJSON())
         return true
     }
 
@@ -83,9 +124,9 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
     fun program() {
-        val functions = function()
-        var varMapCopy = initVarMap.toMutableMap()
-        //TODO dodaj funkcije iz initFunctionMap
+        val functions = initFunctionMap.toMutableMap()
+        functions.putAll(function())
+        val varMapCopy = initVarMap.toMutableMap()
         functions["main"]!!.body(mutableListOf(), functions, varMapCopy)
     }
 
@@ -362,7 +403,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             if (currentTokenType != TokenType.LPAREN) throw Exception("Expected '('").also { printErrorContext() }
             incrementToken()
             val arguments = functionArgs()
-            if (currentTokenType == TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
+            if (currentTokenType != TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
             incrementToken()
             return lambda@{ functions, vars ->
                 val argValues = mutableListOf<String>()

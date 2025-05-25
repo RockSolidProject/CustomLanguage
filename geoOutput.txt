@@ -1,0 +1,110 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636685361614525, 46.554694617887264 ],
+          [ 15.636551790553995, 46.55442725259394 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636552401497255, 46.55442802008244 ],
+          [ 15.636379798048381, 46.55446906815885 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636554054249075, 46.554815834315264 ],
+          [ 15.635844194533462, 46.55497475759063 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635844602835505, 46.55497487515845 ],
+          [ 15.635797559615753, 46.55487624222343 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635775508194058, 46.5548323579325 ],
+          [ 15.635678413416542, 46.554631463391985 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635680592830198, 46.55463156883917 ],
+          [ 15.635849938250573, 46.55459179823788 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Door",
+        "stroke": "#ff0000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.63579810475656, 46.55487638452743 ],
+          [ 15.635775611945377, 46.554832576876066 ]
+        ]
+      }
+    }
+  ]
+}
