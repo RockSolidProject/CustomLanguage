@@ -5,9 +5,9 @@ fun main(){
         println("Analyzing failed.")
         return
     }
-    analyzerOutput.forEach {
+    /*analyzerOutput.forEach {
         println("Content: \"${it.first}\", type: ${it.second}")
-    }
+    }*/
     val semanticAnalyzer = SemanticAnalyzer(analyzerOutput)
     println(semanticAnalyzer.testParse())
 }

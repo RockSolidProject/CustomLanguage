@@ -16,6 +16,148 @@ private fun String.toBigDecimalOrNull(): BigDecimal? {
 }
 
 class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
+    init {
+        initFunctionMap["door"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a door")
+            features.featuresList.add(Door(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["climbingWall"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a climbing wall")
+            features.featuresList.add(ClimbingWall(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["sprayWall"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a spray wall")
+            features.featuresList.add(SprayWall(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["moonboard"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a moonboard")
+            features.featuresList.add(Moonboard(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["window"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a window")
+            features.featuresList.add(Window(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+        initFunctionMap["wall"] = Funct(4,lambda@{ args,functions, vars ->
+            println("Creating a wall")
+            features.featuresList.add(Wall(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["chillOutSpot"] = Funct(8,lambda@{ args,functions, vars ->
+            println("Creating a chill out spot")
+            features.featuresList.add(ChillOutSpot(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[4].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[5].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[6].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[7].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["trainingSpace"] = Funct(8,lambda@{ args,functions, vars ->
+            println("Creating a training space.")
+            features.featuresList.add(TrainingSpace(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[4].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[5].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[6].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[7].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["wardrobe"] = Funct(8,lambda@{ args,functions, vars ->
+            println("Creating a wardrobe.")
+            features.featuresList.add(Wardrobe(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[4].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[5].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[6].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[7].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["reception"] = Funct(8,lambda@{ args,functions, vars ->
+            println("Creating a reception.")
+            features.featuresList.add(Reception(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[4].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[5].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[6].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[7].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+
+        initFunctionMap["toilet"] = Funct(8,lambda@{ args,functions, vars ->
+            println("Creating a toilet.")
+            features.featuresList.add(Toilet(
+                args[0].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[1].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[2].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[3].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[4].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[5].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[6].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers."),
+                args[7].toBigDecimalOrNull() ?: throw Exception("All arguments for doors must be convertible to numbers.")
+            ))
+            return@lambda ""
+        })
+    }
+
     private var tokenIndex = 0
     private var currentToken: Pair<String, TokenType>? = null
     private var currentTokenType: TokenType? = null
@@ -25,20 +167,24 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
     companion object {
         var initFunctionMap = mutableMapOf<String, Funct>()
-        var initVarMap = mutableMapOf<String, String>(Pair("var", "3"))
+        var initVarMap = mutableMapOf<String, String>()
         val file = File("output.txt")
-
-
+        val fileGeo = File("geoOutput.txt")
+        val features = Features()
     }
 
-
     fun testParse(): Boolean {
-        file.createNewFile()
+        file.writeText("")
+
         init()
-        println(program())
+        program()
+
         if (currentTokenType != null) {
             throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
+            //println("Unexpected token: $currentTokenValue")
+            return false
         }
+        fileGeo.writeText(features.toGeoJSON())
         return true
     }
 
@@ -83,46 +229,11 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     }
 
     fun program() {
-        val functions = function()
-        var varMapCopy = initVarMap.toMutableMap()
-        //TODO dodaj funkcije iz initFunctionMap
+        val functions = initFunctionMap.toMutableMap()
+        functions.putAll(function())
+        val varMapCopy = initVarMap.toMutableMap()
         functions["main"]!!.body(mutableListOf(), functions, varMapCopy)
     }
-
-    /*fun parse(): Boolean {
-        init()
-        program()
-        if (currentTokenType != null) {
-            throw Exception("Unexpected token: $currentTokenValue").also {  printErrorContext() }
-        }
-        return true
-    }*/
-
-
-    /*private fun import() {
-        if (currentTokenType != TokenType.IMPORT) {
-            return  // Or throw an error if 'IMPORT' is mandatory
-        }
-        incrementToken()
-
-        if (currentTokenType != TokenType.LPAREN) {
-            throw Exception("Expected '('").also { printErrorContext() }
-        }
-        incrementToken()
-
-        if (currentTokenType != TokenType.STRING) {
-            throw Exception("Expected string").also { printErrorContext() }
-        }
-        incrementToken()
-
-        if (currentTokenType != TokenType.RPAREN) {
-            throw Exception("Expected ')'").also { printErrorContext() }
-        }
-        incrementToken()
-
-        import()
-    }*/
-
 
     private fun function(): MutableMap<String, Funct> {
         if (currentTokenType == TokenType.FUNCTION) {
@@ -174,69 +285,6 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         inherited[pair.first] = pair.second
         return inherited
     }
-    /*private fun function(): MutableMap<String, Funct> {
-        val functions = mutableMapOf<String, Funct>()
-        while (currentTokenType == TokenType.FUNCTION) {
-            val (name, funct) = function1()
-            if (functions.containsKey(name)) {
-                throw Exception("Function $name already defined").also { printErrorContext() }
-            }
-            functions[name] = funct
-        }
-        return functions
-    }
-
-    private fun function1(): Pair<String, Funct> {
-        if (currentTokenType != TokenType.FUNCTION) {
-            throw Exception("Expected 'function'").also { printErrorContext() }
-        }
-        incrementToken()
-
-        if (currentTokenType != TokenType.FUN_NAME) {
-            throw Exception("Expected function name").also { printErrorContext() }
-        }
-        val name = currentTokenValue!!
-        incrementToken()
-
-        if (currentTokenType != TokenType.LPAREN) {
-            throw Exception("Expected '('").also { printErrorContext() }
-        }
-        incrementToken()
-
-        val args = args()
-
-        if (currentTokenType != TokenType.RPAREN) {
-            throw Exception("Expected ')'").also { printErrorContext() }
-        }
-        incrementToken()
-
-        if (currentTokenType != TokenType.LCURL) {
-            throw Exception("Expected '{'").also { printErrorContext() }
-        }
-        incrementToken()
-
-        val act = action()
-
-        if (currentTokenType != TokenType.RCURL) {
-            throw Exception("Expected '}'").also { printErrorContext() }
-        }
-        incrementToken()
-
-        val body = lambda@{ actualArgs: Array<String>, functions: MutableMap<String, Funct> ->
-            if (actualArgs.size != args.size) {
-                throw Exception("Function $name expected ${args.size} arguments, got ${actualArgs.size}")
-            }
-            val localVars = mutableMapOf<String, String>()
-            for (i in args.indices) {
-                localVars[args[i]] = actualArgs[i]
-            }
-            val result = act(functions, localVars)
-            result ?: ""
-        }
-
-        return name to Funct(args.size, body)
-    }  */
-
 
     private fun args(): MutableList<String> {
         return when (currentTokenType) {
@@ -362,7 +410,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             if (currentTokenType != TokenType.LPAREN) throw Exception("Expected '('").also { printErrorContext() }
             incrementToken()
             val arguments = functionArgs()
-            if (currentTokenType == TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
+            if (currentTokenType != TokenType.RPAREN) throw Exception("Expected ')'").also { printErrorContext() }
             incrementToken()
             return lambda@{ functions, vars ->
                 val argValues = mutableListOf<String>()
