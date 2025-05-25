@@ -20,125 +20,289 @@
     "type": "Feature",
       "properties": {
         "name": "ChillOutSpot",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#00dd00",
+        "stroke-width": 3,
+        "fill": "#00aa00",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.63577017460372, 46.554817215186006 ],
           [ 15.635845938339799, 46.554975578250634 ],
           [ 15.636161040547421, 46.55490449673985 ],
           [ 15.636106001656884, 46.55479538762461 ],
           [ 15.63577017460372, 46.554817215186006 ]
-        ]
+        ]]
       }
     },
     {
     "type": "Feature",
       "properties": {
         "name": "ChillOutSpot",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#00dd00",
+        "stroke-width": 3,
+        "fill": "#00aa00",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.636686466288182, 46.554695389221564 ],
           [ 15.636723678499095, 46.554774145286956 ],
           [ 15.63655400057425, 46.55481554000036 ],
           [ 15.636515695315836, 46.55473544511915 ],
           [ 15.636686466288182, 46.554695389221564 ]
-        ]
+        ]]
       }
     },
     {
     "type": "Feature",
       "properties": {
         "name": "Wardrobe",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#666666",
+        "stroke-width": 3,
+        "fill": "#a09da1",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.636342706638345, 46.55486345569699 ],
           [ 15.636302706638105, 46.55478253028292 ],
           [ 15.636518249735559, 46.554735461545334 ],
           [ 15.636556760211846, 46.55481696520525 ],
           [ 15.636342706638345, 46.55486345569699 ]
-        ]
+        ]]
       }
     },
     {
     "type": "Feature",
       "properties": {
         "name": "Wardrobe",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#666666",
+        "stroke-width": 3,
+        "fill": "#a09da1",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.636344427250663, 46.55486289777426 ],
           [ 15.63630300285655, 46.554782596365015 ],
           [ 15.636119954293747, 46.554824237118055 ],
           [ 15.63616215396047, 46.554903777301746 ],
           [ 15.636344427250663, 46.55486289777426 ]
-        ]
+        ]]
       }
     },
     {
     "type": "Feature",
       "properties": {
         "name": "Reception",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#a045d1",
+        "stroke-width": 3,
+        "fill": "#8945d1",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.635769637618381, 46.55481786911949 ],
           [ 15.635831593839185, 46.55481511480863 ],
           [ 15.63590066022914, 46.55496274890962 ],
           [ 15.635847212716214, 46.55497456971659 ],
           [ 15.635769637618381, 46.55481786911949 ]
-        ]
+        ]]
       }
     },
     {
     "type": "Feature",
       "properties": {
         "name": "Toilet",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#a09da1",
+        "stroke-width": 3,
+        "fill": "#666666",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.635845405943229, 46.554973644991975 ],
           [ 15.635813225435584, 46.55497975429299 ],
           [ 15.635795622516866, 46.55494246921802 ],
           [ 15.635826557987855, 46.55493640597081 ],
           [ 15.635845405943229, 46.554973644991975 ]
-        ]
+        ]]
       }
     },
     {
     "type": "Feature",
       "properties": {
         "name": "Toilet",
-        "stroke": "#00ff00",
-        "stroke-width": 3
+        "stroke": "#a09da1",
+        "stroke-width": 3,
+        "fill": "#666666",   
+        "fill-opacity": 0.5  
       },
       "geometry": {
-        "type": "LineString",
-        "coordinates": [
+        "type": "Polygon",
+        "coordinates": [[
           [ 15.63582739459224, 46.55493655768376 ],
           [ 15.635796841300419, 46.55494272262334 ],
           [ 15.63578435151345, 46.554916711666124 ],
           [ 15.635814672710069, 46.55491071918644 ],
           [ 15.63582739459224, 46.55493655768376 ]
+        ]]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635849404090266, 46.55459315120012 ],
+          [ 15.635902786590266, 46.55458082130012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Window",
+        "stroke": "#1cafed",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635902786590266, 46.55458082130012 ],
+          [ 15.635956169090266, 46.55456849140012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635956169090266, 46.55456849140012 ],
+          [ 15.636009551590266, 46.55455616150012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Window",
+        "stroke": "#1cafed",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636009551590266, 46.55455616150012 ],
+          [ 15.636062934090266, 46.55454383160012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636062934090266, 46.55454383160012 ],
+          [ 15.636116316590266, 46.55453150170012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Window",
+        "stroke": "#1cafed",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636116316590266, 46.55453150170012 ],
+          [ 15.636169699090266, 46.55451917180012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636169699090266, 46.55451917180012 ],
+          [ 15.636223081590266, 46.55450684190012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Window",
+        "stroke": "#1cafed",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636223081590266, 46.55450684190012 ],
+          [ 15.636276464090266, 46.55449451200012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636276464090266, 46.55449451200012 ],
+          [ 15.636329846590266, 46.55448218210012 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Window",
+        "stroke": "#1cafed",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636329846590266, 46.55448218210012 ],
+          [ 15.636383229090266, 46.55446985220012 ]
         ]
       }
     },
@@ -146,8 +310,8 @@
     "type": "Feature",
       "properties": {
         "name": "Moonboard",
-        "stroke": "#ff0000",
-        "stroke-width": 4
+        "stroke": "#8a5a07",
+        "stroke-width": 8
       },
       "geometry": {
         "type": "LineString",
@@ -161,7 +325,7 @@
     "type": "Feature",
       "properties": {
         "name": "Climbing wall",
-        "stroke": "#ff0000",
+        "stroke": "#0521f5",
         "stroke-width": 4
       },
       "geometry": {
@@ -176,14 +340,314 @@
     "type": "Feature",
       "properties": {
         "name": "SprayWall",
-        "stroke": "#ff0000",
-        "stroke-width": 4
+        "stroke": "#4a407a",
+        "stroke-width": 6
       },
       "geometry": {
         "type": "LineString",
         "coordinates": [
           [ 15.635750640712246, 46.55477361174147 ],
           [ 15.635683877785311, 46.55463115649397 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "SprayWall",
+        "stroke": "#4a407a",
+        "stroke-width": 6
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635685390196784, 46.554633124843065 ],
+          [ 15.635851038677998, 46.55459434661162 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636290474391927, 46.55461929111442 ],
+          [ 15.636270603443052, 46.55457097395808 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.63627163348977, 46.55457124885757 ],
+          [ 15.636013607342619, 46.55462770734988 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Wall",
+        "stroke": "#000000",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.6360911443482, 46.554739501134065 ],
+          [ 15.636013932400942, 46.55462762034381 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635905118185605, 46.55462893471224 ],
+          [ 15.636469609664715, 46.55451457798989 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636381306045223, 46.55447055315258 ],
+          [ 15.636551693350867, 46.554431152202 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636548932368584, 46.55443314988824 ],
+          [ 15.636682064091275, 46.5546968962509 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.63647065331216, 46.554516200826185 ],
+          [ 15.63654656772826, 46.5546478551029 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.63654656772826, 46.5546478551029 ],
+          [ 15.636415012971213, 46.5547060946391 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.635954284796725, 46.554732072087205 ],
+          [ 15.636091618934444, 46.554738940880156 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636417354801324, 46.5547060517907 ],
+          [ 15.636256421646863, 46.55471925417072 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636256146819306, 46.55471900557362 ],
+          [ 15.636207330806826, 46.554646249046954 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.63620849751777, 46.55464587495962 ],
+          [ 15.63627857506134, 46.55469529001053 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "SprayWall",
+        "stroke": "#4a407a",
+        "stroke-width": 6
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636278897115602, 46.55469579082114 ],
+          [ 15.636496840764778, 46.554647801784625 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636496859773729, 46.554648618029006 ],
+          [ 15.636469582469772, 46.55459615707679 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636470301078106, 46.55459685656717 ],
+          [ 15.636295948842303, 46.55463216180905 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636296706894285, 46.55463243479673 ],
+          [ 15.63643811654947, 46.55458898120551 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.63643818389724, 46.55458872087132 ],
+          [ 15.636411502997788, 46.554538396327104 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636410761430398, 46.55453726246208 ],
+          [ 15.63627254969228, 46.55457529751351 ]
+        ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "Climbing wall",
+        "stroke": "#0521f5",
+        "stroke-width": 4
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [ 15.636273442236927, 46.5545753496846 ],
+          [ 15.636291781099345, 46.554619203946146 ]
         ]
       }
     },
@@ -275,6 +739,26 @@
           [ 15.635680592830198, 46.55463156883917 ],
           [ 15.635849938250573, 46.55459179823788 ]
         ]
+      }
+    },
+    {
+    "type": "Feature",
+      "properties": {
+        "name": "TrainingSpace",
+        "stroke": "#e80770",
+        "stroke-width": 3,
+        "fill": "#910446",   
+        "fill-opacity": 0.5  
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [ 15.636176948748982, 46.554593875678734 ],
+          [ 15.636196272133617, 46.55462535476272 ],
+          [ 15.63605398074634, 46.55468217702014 ],
+          [ 15.636016872130455, 46.55462988004342 ],
+          [ 15.636176948748982, 46.554593875678734 ]
+        ]]
       }
     }
   ]

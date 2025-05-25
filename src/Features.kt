@@ -59,7 +59,7 @@ class ClimbingWall(
             "type": "Feature",
               "properties": {
                 "name": "Climbing wall",
-                "stroke": "#ff0000",
+                "stroke": "#0521f5",
                 "stroke-width": 4
               },
               "geometry": {
@@ -85,8 +85,8 @@ class SprayWall(
             "type": "Feature",
               "properties": {
                 "name": "SprayWall",
-                "stroke": "#ff0000",
-                "stroke-width": 4
+                "stroke": "#4a407a",
+                "stroke-width": 6
               },
               "geometry": {
                 "type": "LineString",
@@ -111,8 +111,8 @@ class Moonboard(
             "type": "Feature",
               "properties": {
                 "name": "Moonboard",
-                "stroke": "#ff0000",
-                "stroke-width": 4
+                "stroke": "#8a5a07",
+                "stroke-width": 8
               },
               "geometry": {
                 "type": "LineString",
@@ -137,8 +137,8 @@ class Window(
             "type": "Feature",
               "properties": {
                 "name": "Window",
-                "stroke": "#0000ff",
-                "stroke-width": 2
+                "stroke": "#1cafed",
+                "stroke-width": 4
               },
               "geometry": {
                 "type": "LineString",
@@ -194,18 +194,20 @@ class ChillOutSpot(
             "type": "Feature",
               "properties": {
                 "name": "ChillOutSpot",
-                "stroke": "#00ff00",
-                "stroke-width": 3
+                "stroke": "#00dd00",
+                "stroke-width": 3,
+                "fill": "#00aa00",   
+                "fill-opacity": 0.5  
               },
               "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [[
                   [ $x1, $y1 ],
                   [ $x2, $y2 ],
                   [ $x3, $y3 ],
                   [ $x4, $y4 ],
                   [ $x1, $y1 ]
-                ]
+                ]]
               }
             }""".trimIndent().prependIndent("    ")
     }
@@ -227,18 +229,20 @@ class TrainingSpace(
             "type": "Feature",
               "properties": {
                 "name": "TrainingSpace",
-                "stroke": "#00ff00",
-                "stroke-width": 3
+                "stroke": "#e80770",
+                "stroke-width": 3,
+                "fill": "#910446",   
+                "fill-opacity": 0.5  
               },
               "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [[
                   [ $x1, $y1 ],
                   [ $x2, $y2 ],
                   [ $x3, $y3 ],
                   [ $x4, $y4 ],
                   [ $x1, $y1 ]
-                ]
+                ]]
               }
             }""".trimIndent().prependIndent("    ")
     }
@@ -260,18 +264,20 @@ class Wardrobe(
             "type": "Feature",
               "properties": {
                 "name": "Wardrobe",
-                "stroke": "#00ff00",
-                "stroke-width": 3
+                "stroke": "#666666",
+                "stroke-width": 3,
+                "fill": "#a09da1",   
+                "fill-opacity": 0.5  
               },
               "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [[
                   [ $x1, $y1 ],
                   [ $x2, $y2 ],
                   [ $x3, $y3 ],
                   [ $x4, $y4 ],
                   [ $x1, $y1 ]
-                ]
+                ]]
               }
             }""".trimIndent().prependIndent("    ")
     }
@@ -292,18 +298,20 @@ class Reception(
             "type": "Feature",
               "properties": {
                 "name": "Reception",
-                "stroke": "#00ff00",
-                "stroke-width": 3
+                "stroke": "#a045d1",
+                "stroke-width": 3,
+                "fill": "#8945d1",   
+                "fill-opacity": 0.5  
               },
               "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [[
                   [ $x1, $y1 ],
                   [ $x2, $y2 ],
                   [ $x3, $y3 ],
                   [ $x4, $y4 ],
                   [ $x1, $y1 ]
-                ]
+                ]]
               }
             }""".trimIndent().prependIndent("    ")
     }
@@ -324,18 +332,20 @@ class Toilet(
             "type": "Feature",
               "properties": {
                 "name": "Toilet",
-                "stroke": "#00ff00",
-                "stroke-width": 3
+                "stroke": "#a09da1",
+                "stroke-width": 3,
+                "fill": "#666666",   
+                "fill-opacity": 0.5  
               },
               "geometry": {
-                "type": "LineString",
-                "coordinates": [
+                "type": "Polygon",
+                "coordinates": [[
                   [ $x1, $y1 ],
                   [ $x2, $y2 ],
                   [ $x3, $y3 ],
                   [ $x4, $y4 ],
                   [ $x1, $y1 ]
-                ]
+                ]]
               }
             }""".trimIndent().prependIndent("    ")
     }

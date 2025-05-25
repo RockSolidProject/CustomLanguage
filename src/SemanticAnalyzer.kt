@@ -175,17 +175,13 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
     fun testParse(): Boolean {
         file.writeText("")
-        try {
-            init()
-            program()
-        }
-        catch (e : Exception) {
-            println("Error: " + e.message)
-            return false
-        }
+
+        init()
+        program()
+
         if (currentTokenType != null) {
-            //throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
-            println("Unexpected token: $currentTokenValue")
+            throw Exception("Unexpected token: $currentTokenValue").also { printErrorContext() }
+            //println("Unexpected token: $currentTokenValue")
             return false
         }
         fileGeo.writeText(features.toGeoJSON())
