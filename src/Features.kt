@@ -47,6 +47,84 @@ class Door(
     }
 }
 
+class ClimbingWall(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "Climbing wall",
+                "stroke": "#ff0000",
+                "stroke-width": 4
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+
+class SprayWall(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "SprayWall",
+                "stroke": "#ff0000",
+                "stroke-width": 4
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+
+class Moonboard(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "Moonboard",
+                "stroke": "#ff0000",
+                "stroke-width": 4
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+
 class Window(
     val x1 : BigDecimal,
     val y1 : BigDecimal,
@@ -98,3 +176,168 @@ class Wall(
             }""".trimIndent().prependIndent("    ")
     }
 }
+
+
+class ChillOutSpot(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal,
+    val x3 : BigDecimal,
+    val y3 : BigDecimal,
+    val x4 : BigDecimal,
+    val y4 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "ChillOutSpot",
+                "stroke": "#00ff00",
+                "stroke-width": 3
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ],
+                  [ $x3, $y3 ],
+                  [ $x4, $y4 ],
+                  [ $x1, $y1 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+
+class TrainingSpace(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal,
+    val x3 : BigDecimal,
+    val y3 : BigDecimal,
+    val x4 : BigDecimal,
+    val y4 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "TrainingSpace",
+                "stroke": "#00ff00",
+                "stroke-width": 3
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ],
+                  [ $x3, $y3 ],
+                  [ $x4, $y4 ],
+                  [ $x1, $y1 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+
+class Wardrobe(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal,
+    val x3 : BigDecimal,
+    val y3 : BigDecimal,
+    val x4 : BigDecimal,
+    val y4 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "Wardrobe",
+                "stroke": "#00ff00",
+                "stroke-width": 3
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ],
+                  [ $x3, $y3 ],
+                  [ $x4, $y4 ],
+                  [ $x1, $y1 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+class Reception(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal,
+    val x3 : BigDecimal,
+    val y3 : BigDecimal,
+    val x4 : BigDecimal,
+    val y4 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "Reception",
+                "stroke": "#00ff00",
+                "stroke-width": 3
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ],
+                  [ $x3, $y3 ],
+                  [ $x4, $y4 ],
+                  [ $x1, $y1 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+class Toilet(
+    val x1 : BigDecimal,
+    val y1 : BigDecimal,
+    val x2 : BigDecimal,
+    val y2 : BigDecimal,
+    val x3 : BigDecimal,
+    val y3 : BigDecimal,
+    val x4 : BigDecimal,
+    val y4 : BigDecimal
+) : Feature (){
+    override fun toGeoJSON(): String {
+        return """
+            {
+            "type": "Feature",
+              "properties": {
+                "name": "Toilet",
+                "stroke": "#00ff00",
+                "stroke-width": 3
+              },
+              "geometry": {
+                "type": "LineString",
+                "coordinates": [
+                  [ $x1, $y1 ],
+                  [ $x2, $y2 ],
+                  [ $x3, $y3 ],
+                  [ $x4, $y4 ],
+                  [ $x1, $y1 ]
+                ]
+              }
+            }""".trimIndent().prependIndent("    ")
+    }
+}
+
