@@ -238,7 +238,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
     private fun function(): MutableMap<String, Funct> {
         if (currentTokenType == TokenType.FUNCTION) {
             val func = function1()
-            val funcMap = function2(mutableMapOf(func))
+            val funcMap = function2(func)
             return funcMap
         } else {
             throw Exception("Unexpected token type: $currentTokenType").also { printErrorContext() }
@@ -246,8 +246,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
     }
 
-    private fun function1(): Pair<String, Funct> {
-        if (currentTokenType != TokenType.FUNCTION) throw Exception("Expected 'function'").also { printErrorContext() }
+    private fun function1(): MutableMap<String, Funct> {
+        if (currentTokenType != TokenType.FUNCTION) return mutableMapOf()
         incrementToken()
         if (currentTokenType != TokenType.FUN_NAME) throw Exception("Expected function name").also { printErrorContext() }
 
@@ -277,12 +277,12 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             val ret = act(functions, vars)
             if (ret is String) return@lambda ret as String else return@lambda ""
         }
-        return Pair(name, Funct(numArgs, body))
+        return mutableMapOf(Pair(name, Funct(numArgs, body)))
     }
     fun function2(inherited: MutableMap<String, Funct>): MutableMap<String, Funct> {
         if(currentTokenType != TokenType.FUNCTION) return inherited
-        val pair = function1()
-        inherited[pair.first] = pair.second
+        inherited.putAll(function1())
+        function2(inherited)
         return inherited
     }
 
@@ -415,8 +415,8 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
             return lambda@{ functions, vars ->
                 val argValues = mutableListOf<String>()
                 for(arg in arguments) argValues.add(arg(functions, vars))
-                var varsCopy = initVarMap.toMutableMap()
-                functions[name]!!.body(argValues, functions, varsCopy)
+                val varsCopy = initVarMap.toMutableMap()
+                val response = functions[name]!!.body(argValues, functions, varsCopy)
                 return@lambda Unit
             }
 
