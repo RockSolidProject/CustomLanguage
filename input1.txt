@@ -1,0 +1,12 @@
+fun main(){
+    $n = 5;
+    print(factorial($n));
+}
+
+fun factorial($input) {
+    write($input + $endl);
+    if ($($input <= 1)){
+        return 1;
+    }
+    return $($input * factorial($($input-1)));
+}

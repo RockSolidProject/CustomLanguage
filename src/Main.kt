@@ -1,6 +1,6 @@
 fun main(){
     val lexicalAnalyzer = LexicalAnalyzer()
-    val analyzerOutput = lexicalAnalyzer.analyzeFile("input.txt")
+    val analyzerOutput = lexicalAnalyzer.analyzeFile("input2.txt")
     if (analyzerOutput == null) {
         println("Analyzing failed.")
         return
