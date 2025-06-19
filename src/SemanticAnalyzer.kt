@@ -167,7 +167,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
 
     companion object {
         var initFunctionMap = mutableMapOf<String, Funct>()
-        var initVarMap = mutableMapOf<String, String>()
+        var initVarMap = mutableMapOf<String, String>(Pair("endl", "\n"))
         val file = File("output.txt")
         val fileGeo = File("geoOutput.txt")
         val features = Features()
@@ -270,7 +270,7 @@ class SemanticAnalyzer(var tokens: List<Pair<String, TokenType>>?) {
         val numArgs = args.size
         val body = lambda@{ functionArguments: MutableList<String>, functions: MutableMap<String, Funct>, variables: MutableMap<String, String> ->
             if (functionArguments.size != numArgs) throw Exception("Expected number of arguments: $numArgs, given: ${functionArguments.size}")
-            val vars = mutableMapOf<String, String>()
+            val vars = initVarMap
             for (i in 0 until numArgs) {
                 vars[args[i]] = functionArguments[i]
             }

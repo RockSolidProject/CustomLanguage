@@ -1,14 +1,11 @@
 fun main() {
-    print(factorial(7));
+    print1();
+    print2();
 }
 
-fun factorial($n) {
-    if($($n == 0)) {
-        return 1;
-    }
-    else {
-        return $(factorial($($n-1)) * $n);
-    }
-
+fun print1(){
+    print("hello1");
 }
-
+fun print2(){
+    print("hello2");
+}

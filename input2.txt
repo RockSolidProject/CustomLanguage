@@ -1,0 +1,26 @@
+fun main() {
+    for ($i = 1; $($i <= 5); $i = $($i+1)){
+        $text = "";
+        if ($($i == 1)) {
+            $text = "Nezadostno";
+        }
+        elif ($($i == 2)) {
+            $text = "Zadostno";
+        }
+        elif ($($i == 3)) {
+            $text = "Dobro";
+        }
+        elif ($($i == 4)) {
+            $text = "Prav dobro";
+        }
+        elif ($($i == 5)) {
+            $text = "Odlicno";
+        }
+        else {
+            print("Cudno");
+            return "";
+        }
+        print($text + " " + $i);
+        write($text[0] + $text[1] + $text[2] + $endl);
+    }
+}
