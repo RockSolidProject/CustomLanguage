@@ -1,1 +1,4 @@
 .idea
+out
+input.txt
+/output.txt

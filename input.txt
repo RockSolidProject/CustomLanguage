@@ -1,0 +1,11 @@
+fun main() {
+    print1();
+    print2();
+}
+
+fun print1(){
+    print("hello1");
+}
+fun print2(){
+    print("hello2");
+}
