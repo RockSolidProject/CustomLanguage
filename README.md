@@ -12,8 +12,11 @@ literals in string and integer form, if statements, while and for loops and func
 ![image](https://github.com/user-attachments/assets/40035709-1ad5-4bbf-9895-05f846bccd2f)
 
 
-In input.txt you are already provided a working example of code. For more information about how to code in the custom language
-you are provided a screenshot below that describes the grammar of the language.
+* Our tokenizer diagram.
+  
+![image](https://github.com/user-attachments/assets/ddb796a8-dd59-45b0-91dd-addb07b9d8af)
+
+* Here you can see a screenshotthat describes the grammar of the language.
 
 ![grammar](./images/grammar.png)
 
