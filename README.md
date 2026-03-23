@@ -12,7 +12,7 @@ literals in string and integer form, if statements, while and for loops and func
 ![image](https://github.com/user-attachments/assets/40035709-1ad5-4bbf-9895-05f846bccd2f)
 
 
-* Our tokenizer diagram.
+* Our tokenizer diagram is in the next image. Also keep in mind we were not allowed to just get keywords at the later stage instead we had to add them to the tokenizer directly, which is not optimal for expandibility.
   
 ![image](https://github.com/user-attachments/assets/ddb796a8-dd59-45b0-91dd-addb07b9d8af)
 
